@@ -1,0 +1,33 @@
+spring:
+  cache:
+    cache-names: holidays
+    caffeine:
+      specs:
+        holidays: maximumSize=500,expireAfterWrite=10m
+resilience4j:
+  retry:
+    instances:
+      nagerApi:
+        max-attempts: 3
+        wait-duration: 500ms
+  ratelimiter:
+    instances:
+      nagerApi:
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        timeout-duration: 0
+
+logging:
+  level:
+    com.accenture.holidayapp.service.HolidayService: DEBUG
+
+server:
+  error:
+    include-message: always
+
+nager:
+  api:
+    base-url: https://date.nager.at/api/v3
+    available-countries-path: /AvailableCountries
+    holidays-path: /PublicHolidays/{year}/{country}
+
